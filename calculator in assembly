@@ -1,0 +1,54 @@
+
+ ; A mini calculator in assembly language 
+
+[org 0x100]
+  jmp start
+   ; sum function
+     sum:
+     add ax,bx
+     ret
+     ; subtraction function
+     subtract:
+     sub ax,bx
+     ret
+     ; multiply function
+     multiply:
+     add ax,bx
+     mul ax
+     ret
+     ; division function
+     division:
+     add  ax,bx
+     div ax
+     ret
+
+   start:
+      mov ax,2
+      mov bx,2
+      push ax
+      push bx
+       call sum                     ; calling the sum function
+       pop bx
+       pop ax
+         push ax
+         push bx
+         call subtract               ; calling the subtract function
+         pop bx
+         pop ax
+           push ax
+           push bx
+           call multiply             ; calling the multiply function
+           pop bx
+           pop ax
+             push ax
+             push bx
+               call division          ; calling the division function
+               pop bx
+               pop ax
+
+       mov ax,0x4c00
+       int 0x21
+        
+
+       
+
