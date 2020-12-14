@@ -1,0 +1,162 @@
+;QUESTION NO # 1
+
+[org 0x0100]
+    jmp start
+
+  
+    ; this is even function              
+evenfunction:
+add dh,1
+ret
+    ; this is odd function
+oddfunction:
+add dl,1
+ret
+
+
+
+start:
+mov si,7
+mov bx,0
+mov dx,0
+
+          
+thirdloop:
+mov ax,[data+bx]
+mov cl,2
+div cl
+
+test ah,1
+jnz firstloop
+
+secondloop:
+  
+  ;calling the even function 
+call evenfunction 
+jmp extra
+
+firstloop:
+
+   ; calling the oddfunction
+call oddfunction ;odd
+extra:
+add bx,2
+sub si,1
+jnz thirdloop
+
+data: dw 3,9,56,43,1,2,23
+
+mov ax,0x4c00
+int 0x21
+
+-------------------------------------------------------------------------------------------------------------------------
+
+;QUESTION NO # 2
+
+[org 0x0100]
+jmp start
+
+    ; first function                          
+result:
+add ah,al
+ret
+
+start:
+mov si,3
+mov bx,0
+mov dx,0
+       
+       ;we start looping process
+looping:
+mov ax,[data+bx]
+mov cl,10
+div cl
+; calling the function
+call result
+mov dh,ah
+
+cmp dh,dl
+
+ja skip
+
+
+jmp down
+
+skip:
+mov dl,dh                        
+
+down:
+add bx,2
+sub si,1
+jnz looping
+
+; data will be here 
+data:dw 47, 72, 31
+
+mov ax,0x4c00
+int 0x21
+
+
+---------------------------------------------------------------------------------------------
+
+
+;QUESTION NO # 3
+
+[org 0x0100]
+
+add2:
+
+; pushing parameters on the stack 
+        push    bp
+        mov     bp,sp
+
+        mov     [bp-20],di
+        mov   [bp-24],si
+        mov   [bp-28],dx
+        mov    dx,[bp-20]
+        mov    ax,[bp-24]
+        add   dx,ax
+        mov   ax,[bp-28]
+        add    ax,dx
+        mov     [bp-4],ax
+        mov   ax,[bp-4]
+        pop    bp
+        leave
+        ret
+
+        ; making another function which is called add 1
+add1:
+        push    bp
+        mov   bp,sp
+
+        sub    sp,24
+        mov    [bp-20],di
+        mov   [bp-24],si
+        mov    dx,[bp-20]
+        mov  ax,[bp-24]
+        add   ax,dx
+        mov    [bp-4],ax
+        mov   dx,[bp-24]
+        mov   cx,[bp-20]
+        mov  ax,[bp-4]
+        mov    si,cx
+        mov    di,ax
+        ;calling the function add 2
+        call  add2
+        leave
+        ret
+
+        ; main of the body 
+main:
+        push    bp
+        mov     bp,sp
+        sub     sp,16
+        mov     si,12
+        mov     di,12
+        ;calling the function add 1
+        call    add1
+        mov     [bp-4],ax
+        pop bp
+        mov     ax, 0
+        leave
+        ret

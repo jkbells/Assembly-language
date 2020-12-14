@@ -1,0 +1,106 @@
+;TASK NO 1
+
+[org 0x100]
+jmp start
+data : dw 4
+data : dw 4
+result : dw 0
+start:
+xor cx,cx,
+mov ax,[data]
+mov bl,[data]
+
+firstloop:
+add cl,1
+shr ax,1
+jnz firstloop
+
+secondloop:
+add dl,1
+shl bl,1
+jnz secondloop
+
+cmp dl,cl
+jc skip
+mov [result],dl
+skip:
+mov [result],cl
+
+mov ax,0x4c00
+int 0x21
+
+
+
+;task no 2
+
+[org 0x0100]
+jmp start
+array : dw 2,3,6,4,8,67,32
+start:
+    mov bx,0
+    xor cx,cx
+    ;this is first loop 
+loop_one:
+    mov ax,[array+bx]
+    test ax,1
+    jz skip
+    add dl,1
+skip:
+    add bx,2
+    cmp bx,14
+    jnz loop_one
+
+    mov bx,0
+    ;this is second loop
+loop_two:
+    mov ax,[array+bx]
+    test ax,1
+    jnz down
+    add dh,1
+down:
+    add bx,2
+    cmp bx,14
+    jnz loop_two
+
+mov ax,0x4c00
+int 0x21
+
+
+; task no #3
+
+[org 0x100]
+jmp start
+All_value : 23,65,12,6,45,38,44,9,87,100  
+start:
+   mov al, 23
+   mov ah, 65
+   and ax,0
+jc skip
+mov cl,1
+skip:
+mov ch,1
+    mov bl,12
+    mov bh,6
+    or bx,0
+    jc skip
+    mov cl,1
+    skip:
+    mov ch,1
+    mov dl,45
+    mov dh,38
+    not dx,0
+    jc skip
+    mov cl,1
+    skip:
+    mov ch,1
+    loop:
+    add bx,0
+    add [All_value+bx]
+    jc loop
+    
+    mov ax,0x4c00
+    int 0x21
+
+
+
+
